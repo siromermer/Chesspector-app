@@ -191,7 +191,9 @@ class _MainMenuPageState extends State<MainMenuPage> {
                     context: context,
                     applicationName: 'Chesspector',
                     applicationVersion: '1.0.0',
-                    applicationLegalese: '© 2026 Ömer  Günaydın',
+                    applicationLegalese: '© 2026 Ömer  Günaydın\n\n'
+                        'Licensed under GNU GPL-3.0\n'
+                        'Source code: https://github.com/siromermer/Chesspector-app',
                   );
                 },
                 child: Text(
