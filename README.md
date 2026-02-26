@@ -1,16 +1,15 @@
 # Chesspector
 
-**Chesspector** is an open-source Flutter mobile app that lets you photograph a real chessboard, detect pieces with AI, and analyze positions with the Stockfish chess engine.
+**Chesspector** is an open-source Flutter mobile app that lets you photograph a real chessboard and analyze positions—alongside a built-in archive of over 5,000 Grandmaster games—all powered by the Stockfish chess engine.
 
 ## Features
 
-- **Board Scanning** — Take a photo of any physical chessboard. The app detects board corners (automatically or manually) and identifies every piece using a YOLOv8 model running on AWS Lambda.
+- **Board Scanning** — Take a photo of any physical chessboard. The app detects board corners (automatically or manually) and identifies every piece using a object detection model running on AWS Lambda.
 - **Stockfish Analysis** — Once a position is recognized, analyze it move-by-move with Stockfish. See evaluation scores, best move arrows, and step through engine lines.
 - **Board Editor** — Manually adjust any detected position before analysis.
 - **Play vs Stockfish** — Play a full game against Stockfish at adjustable depth (1-25). Save and resume games at any time.
 - **Grandmaster Archive** — Browse 5,000 games from 20 legendary grandmasters (Alekhine, Anand, Capablanca, Carlsen, Fischer, Kasparov, Tal, and more). Replay any game move-by-move with Stockfish evaluation.
 - **Game Saving** — Save positions from analysis or from games against Stockfish. Reopen them later and continue exactly where you left off.
-- **Move Sounds** — Distinct audio feedback for normal moves, captures, castling, checks, and promotions.
 
 ## Screenshots
 
@@ -57,7 +56,7 @@ Chesspector's image processing runs on three AWS Lambda functions behind API Gat
 |---|---|
 | **Static Corner Detection** | Detects chessboard corners using OpenCV |
 | **Dynamic Corner Detection** | Alternative corner detection for different perspectives |
-| **Piece Detection** | Identifies chess pieces using a YOLOv8 model |
+| **Piece Detection** | Identifies chess pieces using a object detection model |
 
 Authentication is handled via **AWS Cognito Identity Pool** (unauthenticated access) with **SigV4-signed** requests. You will need to deploy your own Lambda functions and configure the endpoints in `api_config.dart`.
 
@@ -112,12 +111,11 @@ Chesspector uses the [Stockfish](https://stockfishchess.org/) chess engine, whic
 
 ## Acknowledgments
 
-- **[Stockfish](https://github.com/official-stockfish/Stockfish)** — Free, powerful open-source chess engine (GPL-3.0)
+- **[Stockfish](https://github.com/official-stockfish/Stockfish)** —  open-source chess engine (GPL-3.0)
 - **[stockfish](https://pub.dev/packages/stockfish)** — Flutter/Dart package providing Stockfish bindings (GPL-3.0)
 - **[flutter_chess_board](https://pub.dev/packages/flutter_chess_board)** — Chessboard widget for Flutter
 - **[chess](https://pub.dev/packages/chess)** — Chess logic library for Dart
 - **[OpenCV](https://github.com/opencv/opencv)** — Computer vision library used in backend corner detection (Apache 2.0)
-- **[YOLOv8](https://github.com/ultralytics/ultralytics)** — Object detection model used for piece recognition (AGPL-3.0)
 
 ## Author
 
