@@ -1,0 +1,52 @@
+name: chesspector
+description: "Chesspector — scan a real chessboard photo, detect pieces with AI, and analyze with Stockfish."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  stockfish: ^1.8.1
+  chess: ^0.7.0
+  flutter_chess_board: ^1.0.1
+  image_picker: ^1.0.7
+  http: ^1.2.0
+  shared_preferences: ^2.5.4
+  aws_common: ^0.7.12
+  aws_signature_v4: ^0.6.10
+  flutter_native_splash: ^2.4.7
+  audioplayers: ^6.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/chesspector_logo.jpg
+    - assets/pgn_masters/
+    - assets/sounds/chess_move_sound.mp3
+    - assets/sounds/castle.mp3
+    - assets/sounds/move-check.mp3
+    - assets/sounds/promote.mp3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/chesspector_logo.jpg"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/chesspector_logo.jpg"
+
+flutter_native_splash:
+  color: "#262522"
+  image: assets/chesspector_logo.jpg
+  android: true
+  ios: true
+  web: false
