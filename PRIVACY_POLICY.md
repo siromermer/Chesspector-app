@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-Chesspector is a mobile application that allows users to photograph a physical chessboard, detect pieces using artificial intelligence, and analyze positions with the Stockfish chess engine. This privacy policy explains what data the app collects, how it is used, and how it is protected.
+Chesspector is an open-source Flutter mobile app that lets you photograph a real chessboard and analyze positions—alongside a built-in archive of over 5,000 Grandmaster games—all powered by the Stockfish chess engine.
 
 ---
 
