@@ -614,7 +614,22 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
             pieceSymbol,
             style: TextStyle(
               fontSize: 26,
-              color: isWhite ? Colors.white : Colors.grey[700],
+              color: isWhite ? Colors.white : Colors.grey[900],
+              shadows: isWhite 
+                ? [
+                    Shadow(
+                      offset: const Offset(0, 0),
+                      blurRadius: 2.0,
+                      color: Colors.black.withOpacity(0.5),
+                    ),
+                  ]
+                : [
+                    Shadow(
+                      offset: const Offset(0, 0),
+                      blurRadius: 3.0,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ],
             ),
           ),
         ),
@@ -629,7 +644,7 @@ class _BoardEditorPageState extends State<BoardEditorPage> {
       case 'r': return piece == 'R' ? '♖' : '♜';
       case 'b': return piece == 'B' ? '♗' : '♝';
       case 'n': return piece == 'N' ? '♘' : '♞';
-      case 'p': return piece == 'P' ? '♙' : '♙';
+      case 'p': return '♙'; // Use same symbol for both, differentiate with color
       default: return '?';
     }
   }

@@ -212,6 +212,7 @@ class _PlayComputerSetupPageState extends State<PlayComputerSetupPage> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
+    final isWhite = label == 'White';
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -229,7 +230,28 @@ class _PlayComputerSetupPageState extends State<PlayComputerSetupPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(icon, style: const TextStyle(fontSize: 42)),
+            Text(
+              icon,
+              style: TextStyle(
+                fontSize: 42,
+                color: isWhite ? Colors.white : Colors.grey[900],
+                shadows: isWhite
+                  ? [
+                      Shadow(
+                        offset: const Offset(0, 0),
+                        blurRadius: 2.0,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ]
+                  : [
+                      Shadow(
+                        offset: const Offset(0, 0),
+                        blurRadius: 3.0,
+                        color: Colors.white.withOpacity(0.8),
+                      ),
+                    ],
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               label,
