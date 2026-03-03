@@ -20,6 +20,7 @@ dependencies:
   aws_signature_v4: ^0.6.10
   flutter_native_splash: ^2.4.7
   audioplayers: ^6.5.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

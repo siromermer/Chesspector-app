@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide Color;
 import 'package:flutter/material.dart' as material;
 import 'package:flutter_chess_board/flutter_chess_board.dart';
 import 'package:stockfish/stockfish.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'board_editor_page.dart';
 import 'game_storage.dart';
 import 'main_menu_page.dart';
@@ -743,6 +744,137 @@ class _ChessGameState extends State<ChessGame> {
     );
   }
 
+  /// Show export options to open the current position on Lichess or Chess.com
+  void _showExportDialog() {
+    final fen = controller.game.fen;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+          decoration: const BoxDecoration(
+            color: material.Color(0xFF302E2B),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Handle bar
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Text(
+                'Open Position In',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withOpacity(0.9),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Analyze this position on your favorite platform',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white.withOpacity(0.4),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Lichess button
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    try {
+                      // Lichess format: spaces replaced with underscores in the path
+                      final lichessFen = fen.replaceAll(' ', '_');
+                      final url = Uri.parse('https://lichess.org/analysis/$lichessFen');
+                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Could not open Lichess'),
+                            backgroundColor: kRed,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.open_in_new_rounded, size: 20),
+                  label: const Text(
+                    'Lichess',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Chess.com button
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    Navigator.pop(ctx);
+                    try {
+                      // Chess.com format: FEN as query parameter
+                      final url = Uri.parse('https://www.chess.com/analysis').replace(
+                        queryParameters: {'fen': fen},
+                      );
+                      await launchUrl(url, mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: const Text('Could not open Chess.com'),
+                            backgroundColor: kRed,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  icon: const Icon(Icons.open_in_new_rounded, size: 20),
+                  label: const Text(
+                    'Chess.com',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const material.Color(0xFF769656),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   void _showDepthSettings() {
     showModalBottomSheet(
       context: context,
@@ -1000,6 +1132,11 @@ class _ChessGameState extends State<ChessGame> {
           tooltip: 'Edit Position',
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.open_in_new_rounded, size: 22),
+            onPressed: _showExportDialog,
+            tooltip: 'Open in Lichess / Chess.com',
+          ),
           IconButton(
             icon: const Icon(Icons.save_rounded, size: 22),
             onPressed: _showSaveGameDialog,
