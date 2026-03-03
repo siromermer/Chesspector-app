@@ -1,7 +1,7 @@
 name: chesspector
 description: "Chesspector — scan a real chessboard photo, detect pieces with AI, and analyze with Stockfish."
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.10.3
