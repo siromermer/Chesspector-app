@@ -950,6 +950,335 @@ class _CornerDetectionPageState extends State<CornerDetectionPage> {
     setState(() => _whiteSide = side);
   }
 
+  /// Show a full-screen photo guide with tips and example images
+  void _showPhotoGuide() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.85,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (context, scrollController) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFF302E2B),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: Column(
+                children: [
+                  // Handle bar
+                  Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(top: 12, bottom: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.tips_and_updates_rounded, color: Color(0xFF69946B), size: 26),
+                        const SizedBox(width: 10),
+                        const Text(
+                          'Photo Tips',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          icon: Icon(Icons.close, color: Colors.white.withOpacity(0.5)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Follow these tips for the most accurate board detection',
+                      style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.4)),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // Scrollable content
+                  Expanded(
+                    child: ListView(
+                      controller: scrollController,
+                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 32),
+                      children: [
+                        // ── Tips section ──
+                        _buildTipItem(
+                          icon: Icons.camera_rounded,
+                          title: 'Shoot from above at an angle',
+                          description: 'Hold your phone above the board at roughly a 45° angle. A slight tilt is fine — you don\'t need a perfectly top-down shot.',
+                        ),
+                        _buildTipItem(
+                          icon: Icons.stay_current_portrait_rounded,
+                          title: 'Hold phone vertically',
+                          description: 'Take the photo in portrait mode (vertical). Landscape photos may crop the board edges.',
+                        ),
+                        _buildTipItem(
+                          icon: Icons.light_mode_rounded,
+                          title: 'Good, even lighting',
+                          description: 'Avoid harsh shadows on the board. Natural daylight or a well-lit room works best.',
+                        ),
+                        _buildTipItem(
+                          icon: Icons.texture_rounded,
+                          title: 'Plain background',
+                          description: 'Use a simple, solid-color surface under the board. Patterned tablecloths or busy backgrounds can confuse the detector.',
+                        ),
+                        _buildTipItem(
+                          icon: Icons.crop_free_rounded,
+                          title: 'Full board visible',
+                          description: 'Make sure all 4 corners of the board are clearly visible in the frame. Leave a small margin around the board.',
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Good examples ──
+                        Row(
+                          children: [
+                            Icon(Icons.check_circle_rounded, color: const Color(0xFF69946B), size: 22),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Good Examples',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF69946B),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildExampleImage(
+                                'assets/photo_guide/good_image.jpg',
+                                'Clear lighting, plain background',
+                                true,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildExampleImage(
+                                'assets/photo_guide/good_image2.jpeg',
+                                'Good angle, all corners visible',
+                                true,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Bad examples ──
+                        Row(
+                          children: [
+                            Icon(Icons.cancel_rounded, color: const Color(0xFFC37B76), size: 22),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Avoid These',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFFC37B76),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildExampleImage(
+                                'assets/photo_guide/bad_background.jpg',
+                                'Patterned/busy background',
+                                false,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _buildExampleImage(
+                                'assets/photo_guide/bad_lighting.jpg',
+                                'Poor lighting / harsh shadows',
+                                false,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Quick summary card ──
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF69946B).withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: const Color(0xFF69946B).withOpacity(0.3)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Quick Checklist',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF69946B),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              _buildChecklistItem('Phone held vertically (portrait)'),
+                              _buildChecklistItem('All 4 board corners visible'),
+                              _buildChecklistItem('Good, even lighting'),
+                              _buildChecklistItem('Plain background surface'),
+                              _buildChecklistItem('Shot from above at an angle'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildTipItem({
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.07),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(icon, color: const Color(0xFF69946B), size: 22),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white.withOpacity(0.5),
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildExampleImage(String assetPath, String caption, bool isGood) {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isGood
+                  ? const Color(0xFF69946B).withOpacity(0.5)
+                  : const Color(0xFFC37B76).withOpacity(0.5),
+              width: 2,
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AspectRatio(
+              aspectRatio: 3 / 4,
+              child: Image.asset(
+                assetPath,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              isGood ? Icons.check_circle_rounded : Icons.cancel_rounded,
+              color: isGood ? const Color(0xFF69946B) : const Color(0xFFC37B76),
+              size: 14,
+            ),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                caption,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white.withOpacity(0.5),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildChecklistItem(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        children: [
+          Icon(Icons.check_rounded, color: const Color(0xFF69946B), size: 18),
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white.withOpacity(0.7),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1000,6 +1329,15 @@ class _CornerDetectionPageState extends State<CornerDetectionPage> {
                           onPressed: () => Navigator.pop(context),
                           tooltip: 'Back',
                         ),
+          actions: [
+            // Show photo guide help button only on the main scanner view
+            if (!_isAdjusting && !_isManualCornerMode && !_selectingWhiteSide)
+              IconButton(
+                icon: const Icon(Icons.help_outline_rounded, size: 24),
+                onPressed: _showPhotoGuide,
+                tooltip: 'Photo Tips',
+              ),
+          ],
         ),
         body: _isAdjusting
             ? _buildAdjustmentView()

@@ -37,6 +37,7 @@ flutter:
     - assets/sounds/castle.mp3
     - assets/sounds/move-check.mp3
     - assets/sounds/promote.mp3
+    - assets/photo_guide/
 
 flutter_launcher_icons:
   android: true
