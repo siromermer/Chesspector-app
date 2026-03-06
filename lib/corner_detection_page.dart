@@ -1112,7 +1112,7 @@ class _CornerDetectionPageState extends State<CornerDetectionPage> {
                             Expanded(
                               child: _buildExampleImage(
                                 'assets/photo_guide/bad_lighting.jpg',
-                                'Poor lighting / harsh shadows',
+                                'Poor lighting',
                                 false,
                               ),
                             ),
